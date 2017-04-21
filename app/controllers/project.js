@@ -18,3 +18,26 @@ exports.create = function (req, res, next) {
         res.send(project);
     });
 };
+
+exports.delete = function (req, res, next) {
+    var user_id = req.user._id;
+    var id_project = req.params.id_project;
+
+    Project.findById(id_project, function (err, foundProject) {
+        if (err) {
+            res.status(422).json({error: 'Projeto não encontrado'});
+            return next(err);
+        }
+
+        if (foundProject.id_user != user_id) {
+            res.status(401).json({error: 'Você não está autorizado a excluir este projeto.'});
+            return next('Não autorizado');
+        }
+
+        Project.remove({
+            _id: id_project
+        }, function (err, deleted) {
+            res.json(deleted);
+        });
+    });
+};
