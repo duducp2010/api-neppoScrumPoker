@@ -12,7 +12,8 @@ function setUserInfo(request) {
     return {
         _id: request._id,
         email: request.email,
-        role: request.role
+        departamento: request.departamento,
+        funcao: request.funcao
     };
 }
 
@@ -25,17 +26,67 @@ exports.login = function (req, res, next) {
     });
 };
 
-exports.roleAuthorization = function (roles) {
+exports.register = function (req, res, next) {
+    var email = req.body.email;
+    var password = req.body.password;
+    var departamento = req.body.departamento;
+    var funcao = req.body.funcao;
+
+    if (!email) {
+        return res.status(422).send({error: 'Você deve digitar um e-mail'});
+    }
+
+    if (!password) {
+        return res.status(422).send({error: 'Você deve digitar uma senha'});
+    }
+
+    if (!departamento) {
+        return res.status(422).send({error: 'Você deve informar o departamento'});
+    }
+
+    User.findOne({email: email}, function (err, existingUser) {
+        if (err) {
+            return next(err);
+        }
+
+        if (existingUser) {
+            return res.status(422).send({error: 'Esse e-mail já esta em uso'});
+        }
+
+        var user = new User({
+            email: email,
+            password: password,
+            departamento: departamento,
+            funcao: funcao
+        });
+
+        user.save(function (err, user) {
+            if (err) {
+                return next(err);
+            }
+
+            var userInfo = setUserInfo(user);
+
+            res.status(201).json({
+                token: 'JWT ' + generateToken(userInfo),
+                user: userInfo
+            })
+
+        });
+    });
+};
+
+exports.roleAuthorization = function (funcao) {
     return function (req, res, next) {
         var user = req.user;
 
         User.findById(user._id, function (err, foundUser) {
             if (err) {
-                res.status(422).json({error: 'Usuário não encontrado..'});
+                res.status(422).json({error: 'Usuário não encontrado'});
                 return next(err);
             }
 
-            if (roles.indexOf(foundUser.role) > -1) {
+            if (funcao.indexOf(foundUser.funcao) > -1) {
                 return next();
             }
 

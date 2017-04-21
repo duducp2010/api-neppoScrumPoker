@@ -13,11 +13,11 @@ var UserSchema = new mongoose.Schema({
         required: true,
         min: 6
     },
-    function: {
+    departamento: {
         type: String,
         required: true
     },
-    role: {
+    funcao: {
         type: String,
         enum: ['Administrador', 'Usuário'],
         default: 'Usuário'
