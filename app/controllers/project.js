@@ -1,5 +1,15 @@
 const Project = require('../models/project');
 
+exports.getAllProjects = function (req, res, next) {
+    Project.find(function (err, projects) {
+        if (err) {
+            res.send(err);
+        }
+
+        res.json(projects);
+    });
+};
+
 exports.create = function (req, res, next) {
     Project.create({
         title: req.body.title,
