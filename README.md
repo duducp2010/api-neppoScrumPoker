@@ -22,6 +22,31 @@ Para rodar o servidor e testar a api, execute:
 $ npm run start
 ```
 
+### Rota para Registro de Usuário
+
+- Registro
+{POST} /api/auth/register
+```bash
+email: {
+    type: String,
+    required: true
+},
+password: {
+    type: String,
+    required: true,
+    min: 6
+},
+departamento: {
+    type: String,
+    required: true,
+},
+funcao: {
+    type: String,
+    enum: ['Administrador', 'Usuário'],
+    default: 'Usuário'
+}
+```
+
 ### Rotas para Autenticação e Checagem
 
 - Autenticação
