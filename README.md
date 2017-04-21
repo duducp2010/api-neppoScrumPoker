@@ -76,10 +76,18 @@ HEADER: {
 Sempre enviar o Header: `Authorization <token>`
 
 - Cadastrar
+```bash
 {POST} /api/project/create
+```
 
 - Deletar
+```bash
 {POST} /api/project/delete/:id_project
+```
+
+Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Listar todos cadastrados
+```bash
 {GET} /api/project/all
+```
