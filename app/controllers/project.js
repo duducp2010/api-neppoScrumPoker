@@ -8,6 +8,14 @@ exports.getAllProjects = function (req, res, next) {
     });
 };
 
+exports.getProject = function (req, res, next) {
+    Project.findById(req.params.id_project, function (err, project) {
+        if (err) return res.send(500, {error: err});
+
+        res.json(project);
+    });
+};
+
 exports.create = function (req, res, next) {
     Project.create({
         title: req.body.title,
