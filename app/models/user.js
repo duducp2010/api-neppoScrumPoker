@@ -6,21 +6,25 @@ var UserSchema = new mongoose.Schema({
         type: String,
         lowercase: true,
         unique: true,
-        required: true
+        required: [true, 'Um e-mail deve ser informado'],
+        validate: function (email) {
+            return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
+        }
     },
     password: {
         type: String,
-        required: true,
-        min: 6
+        required: [true, 'Uma senha deve ser informada'],
+        min: 64,
+        max: 64
     },
-    departamento: {
+    department: {
         type: String,
-        required: true
+        required: [true, 'Informe o departamento do usuário']
     },
-    funcao: {
+    role: {
         type: String,
-        enum: ['Administrador', 'Usuário'],
-        default: 'Usuário'
+        enum: ['user', 'admin'],
+        default: 'user'
     }
 }, {
     timestamps: true

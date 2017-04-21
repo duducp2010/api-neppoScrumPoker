@@ -12,8 +12,8 @@ function setUserInfo(request) {
     return {
         _id: request._id,
         email: request.email,
-        departamento: request.departamento,
-        funcao: request.funcao
+        department: request.department,
+        role: request.role
     };
 }
 
@@ -29,8 +29,8 @@ exports.login = function (req, res, next) {
 exports.register = function (req, res, next) {
     var email = req.body.email;
     var password = req.body.password;
-    var departamento = req.body.departamento;
-    var funcao = req.body.funcao;
+    var department = req.body.department;
+    var role = req.body.role;
 
     if (!email) {
         return res.status(422).send({error: 'Você deve digitar um e-mail'});
@@ -40,7 +40,7 @@ exports.register = function (req, res, next) {
         return res.status(422).send({error: 'Você deve digitar uma senha'});
     }
 
-    if (!departamento) {
+    if (!department) {
         return res.status(422).send({error: 'Você deve informar o departamento'});
     }
 
@@ -56,8 +56,8 @@ exports.register = function (req, res, next) {
         var user = new User({
             email: email,
             password: password,
-            departamento: departamento,
-            funcao: funcao
+            department: department,
+            role: role
         });
 
         user.save(function (err, user) {
@@ -76,7 +76,7 @@ exports.register = function (req, res, next) {
     });
 };
 
-exports.roleAuthorization = function (funcao) {
+exports.roleAuthorization = function (role) {
     return function (req, res, next) {
         var user = req.user;
 
@@ -86,7 +86,7 @@ exports.roleAuthorization = function (funcao) {
                 return next(err);
             }
 
-            if (funcao.indexOf(foundUser.funcao) > -1) {
+            if (role.indexOf(foundUser.role) > -1) {
                 return next();
             }
 
