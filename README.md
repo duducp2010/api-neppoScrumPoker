@@ -19,7 +19,7 @@ $ npm install
 
 Para rodar o servidor e testar a api, execute:
 ```bash
-$ npm run start
+$ npm start
 ```
 
 ### Rota para Registro de Usuário
@@ -70,3 +70,16 @@ HEADER: {
     Authorization: JWT <token>
 }
 ```
+
+### Projetos
+
+Sempre enviar o Header: `Authorization <token>`
+
+- Cadastrar
+{POST} /api/project/create
+
+- Deletar
+{POST} /api/project/delete/:id_project
+
+- Listar todos cadastrados
+{GET} /api/project/all
