@@ -24,9 +24,9 @@ module.exports = function (app) {
 
     // Project Routes
     apiRoutes.use('/project', projectRoutes);
-    projectRoutes.get('/all', requireAuth, ProjectController.getAllProjects);
-    projectRoutes.post('/create', requireAuth, ProjectController.create);
-    projectRoutes.post('/delete/:id_project', requireAuth, ProjectController.delete);
+    projectRoutes.get('/', requireAuth, ProjectController.getAllProjects);
+    projectRoutes.post('/', requireAuth, ProjectController.create);
+    projectRoutes.delete('/:id_project', requireAuth, ProjectController.delete);
 
     // Set up routes
     app.use('/api', apiRoutes);
