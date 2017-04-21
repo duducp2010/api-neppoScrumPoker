@@ -1,10 +1,11 @@
-var AuthenticationController = require('./controllers/authentication'),
-    TodoController = require('./controllers/todos'),
-    express = require('express'),
+const express = require('express'),
     passportService = require('../config/passport'),
-    passport = require('passport');
+    passport = require('passport'),
+    AuthenticationController = require('./controllers/authentication'),
+    TodoController = require('./controllers/todos'),
+    ProjectController = require('./controllers/project');
 
-var requireAuth = passport.authenticate('jwt', {session: false}),
+const requireAuth = passport.authenticate('jwt', {session: false}),
     requireLogin = passport.authenticate('local', {session: false});
 
 module.exports = function (app) {
@@ -12,6 +13,7 @@ module.exports = function (app) {
     const apiRoutes = express.Router(),
         authRoutes = express.Router(),
         todoRoutes = express.Router();
+    projectRoutes = express.Router();
 
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
@@ -21,6 +23,10 @@ module.exports = function (app) {
     authRoutes.get('/protected', requireAuth, function (req, res) {
         res.send({content: 'Success'});
     });
+
+    // Project Routes
+    apiRoutes.use('/project', projectRoutes);
+    projectRoutes.post('/create', requireAuth, ProjectController.create);
 
     // Todos Routes
     apiRoutes.use('/projeto', todoRoutes);
