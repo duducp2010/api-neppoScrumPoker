@@ -2,9 +2,7 @@ const Project = require('../models/project');
 
 exports.getAllProjects = function (req, res, next) {
     Project.find(function (err, projects) {
-        if (err) {
-            res.send(err);
-        }
+        if (err) return res.send(500, {error: err});
 
         res.json(projects);
     });
@@ -21,11 +19,23 @@ exports.create = function (req, res, next) {
         time: req.body.time,
         id_user: req.body.id_user
     }, function (err, project) {
-        if (err) {
-            res.send(err);
-        }
+        if (err) return res.send(500, {error: err});
 
-        res.send(project);
+        res.json({
+            message: 'Projeto criado com sucesso!',
+            project: project
+        });
+    });
+};
+
+exports.update = function (req, res, next) {
+    Project.findByIdAndUpdate(req.params.id_project, {$set: req.body}, {new: true}, function (err, updateProject) {
+        if (err) return res.send(500, {error: err});
+
+        res.json({
+            message: 'Atualizado com sucesso!',
+            project: updateProject
+        });
     });
 };
 
@@ -47,7 +57,12 @@ exports.delete = function (req, res, next) {
         Project.remove({
             _id: id_project
         }, function (err, deleted) {
-            res.json(deleted);
+            if (err) return res.send(500, {error: err});
+
+            return res.json({
+                message: 'Projeto excluído com sucesso!',
+                project: deleted
+            });
         });
     });
 };
