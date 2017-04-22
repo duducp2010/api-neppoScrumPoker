@@ -93,10 +93,14 @@ exports.update = function (req, res, next) {
     Project.findByIdAndUpdate(req.params.id_project, {$set: req.body}, {new: true}, function (err, updateProject) {
         if (err) return res.send(500, {error: err});
 
-        res.json({
-            message: 'Atualizado com sucesso!',
-            project: updateProject
-        });
+        if (updateProject) {
+            res.json({
+                message: 'Atualizado com sucesso!',
+                project: updateProject
+            });
+        }
+
+        res.status(422).json({error: 'Nenhum projeto encontrado'});
     });
 };
 
