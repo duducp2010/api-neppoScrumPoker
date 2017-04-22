@@ -104,6 +104,8 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.. Ex.: `http:\\meusite.com/api/project/?orderBy=title&sort=asc`
 
+- Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/project/?limit=2`, neste caso irá mostrar somente 2 documentos.
+
 ##### Listar determinado projeto
 ```bash
 {GET} /api/project/:id_project
