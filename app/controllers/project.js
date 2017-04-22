@@ -17,53 +17,36 @@ function sortAndOrderBy(keySort, keyOrderBy) {
 
 exports.getAllProjects = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
-    const limit = req.query.limit;
-    const select = req.query.select;
-    var query = {};
 
-    if (req.query.userTime === 'true') {
-        query = Project.find({$or: [{time: req.user._id}, {id_user: req.user._id}]})
-            .sort(sortObj)
-            .limit(Number(limit))
-            .select(select);
-
-        query.exec(function (err, project) {
+    if (req.query.userTime == 'true') {
+        Project.find().sort(sortObj).find({$or: [{'time': req.user._id}, {'id_user': req.user._id}]}, function (err, project) {
             if (err) return res.send(500, {error: err});
+
             res.json(project);
         });
     } else {
-        query = Project.find()
-            .sort(sortObj)
-            .limit(Number(limit))
-            .select(select);
-
-        query.exec(function (err, projects) {
+        Project.find().sort(sortObj).find(function (err, projects) {
             if (err) return res.send(500, {error: err});
+
             res.json(projects);
         });
     }
 };
 
 exports.getProject = function (req, res, next) {
-    var query = {};
-    const select = req.query.select;
-
-    if (req.query.userTime === 'true') {
-        query = Project.find({
-            $or: [{'time': req.user._id}, {'id_user': req.user._id}],
-            _id: req.params.id_project
-        })
-            .select(select);
-
-        query.exec(function (err, project) {
+    if (req.query.userTime == 'true') {
+        Project.find({
+            _id: req.params.id_project,
+            $or: [{'time': req.user._id}, {'id_user': req.user._id}]
+        }, function (err, project) {
             if (err) return res.send(500, {error: err});
+
             res.json(project);
         });
     } else {
-        query = Project.findById(req.params.id_project).select(select);
-
-        query.exec(function (err, project) {
+        Project.findById(req.params.id_project, function (err, project) {
             if (err) return res.send(500, {error: err});
+
             res.json(project);
         });
     }
@@ -110,7 +93,7 @@ exports.delete = function (req, res, next) {
             return next(err);
         }
 
-        if (foundProject.id_user !== user_id) {
+        if (foundProject.id_user != user_id) {
             res.status(401).json({error: 'Você não está autorizado a excluir este projeto.'});
             return next('Não autorizado');
         }
