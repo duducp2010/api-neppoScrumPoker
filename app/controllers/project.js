@@ -1,19 +1,38 @@
 const Project = require('../models/project');
 
 exports.getAllProjects = function (req, res, next) {
-    Project.find(function (err, projects) {
-        if (err) return res.send(500, {error: err});
+    if (req.query.userTime == 'true') {
+        Project.find({$or: [{'time': req.user._id}, {'id_user': req.user._id}]}, function (err, project) {
+            if (err) return res.send(500, {error: err});
 
-        res.json(projects);
-    });
+            res.json(project);
+        });
+    } else {
+        Project.find(function (err, projects) {
+            if (err) return res.send(500, {error: err});
+
+            res.json(projects);
+        });
+    }
 };
 
 exports.getProject = function (req, res, next) {
-    Project.findById(req.params.id_project, function (err, project) {
-        if (err) return res.send(500, {error: err});
+    if (req.query.userTime == 'true') {
+        Project.find({
+            _id: req.params.id_project,
+            $or: [{'time': req.user._id}, {'id_user': req.user._id}]
+        }, function (err, project) {
+            if (err) return res.send(500, {error: err});
 
-        res.json(project);
-    });
+            res.json(project);
+        });
+    } else {
+        Project.findById(req.params.id_project, function (err, project) {
+            if (err) return res.send(500, {error: err});
+
+            res.json(project);
+        });
+    }
 };
 
 exports.create = function (req, res, next) {
