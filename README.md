@@ -106,6 +106,8 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/project/?limit=2`, neste caso irá mostrar somente 2 documentos.
 
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
 ##### Listar determinado projeto
 ```bash
 {GET} /api/project/:id_project
@@ -113,3 +115,5 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
 `?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário. Ex.: `http:\\meusite.com/api/project/?userTime=true`
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
