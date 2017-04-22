@@ -73,21 +73,31 @@ HEADER: {
 
 ### Projetos
 
-Sempre enviar o Header: `Authorization <token>`
+Sempre enviar o Header: `Authorization: JWT <token>`
 
 - Cadastrar
 ```bash
-{POST} /api/project/create
+{POST} /api/project
+```
+
+- Atualizar
+```bash
+{PUT} /api/project/:id_project
 ```
 
 - Deletar
 ```bash
-{POST} /api/project/delete/:id_project
+{DELETE} /api/project/:id_project
 ```
 
 Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
-- Listar todos cadastrados
+- Listar todos projetos cadastrados
 ```bash
-{GET} /api/project/all
+{GET} /api/project
+```
+
+- Listar um determinado projeto
+```bash
+{GET} /api/project/:id_project
 ```
