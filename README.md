@@ -1,7 +1,7 @@
 Neppo Scrum Poker
 =====================
 
-### Api Restful
+## Api Restful
 
 Certifique-se que você tenha instalado o [NodeJs](https://nodejs.org/en/download/) em sua máquina.
 
@@ -22,7 +22,7 @@ Para rodar o servidor e testar a api, execute:
 $ npm start
 ```
 
-### Rota para Registro de Usuário
+#### Rota para Registro de Usuário
 
 - Registro
 {POST} /api/auth/register
@@ -47,7 +47,7 @@ funcao: {
 }
 ```
 
-### Rotas para Autenticação e Checagem
+#### Rotas para Autenticação e Checagem
 
 - Autenticação
 {POST} /api/auth/login
@@ -71,28 +71,28 @@ HEADER: {
 }
 ```
 
-### Projetos
+## Projetos
 
 Sempre enviar o Header: `Authorization: JWT <token>`
 
-##### Cadastrar
+#### Cadastrar
 ```bash
 {POST} /api/project
 ```
 
-##### Atualizar
+#### Atualizar
 ```bash
 {PUT} /api/project/:id_project
 ```
 
-##### Deletar
+#### Deletar
 ```bash
 {DELETE} /api/project/:id_project
 ```
 
 Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
-##### Listar projetos cadastrados
+#### Listar projetos cadastrados
 ```bash
 {GET} /api/project
 ```
@@ -108,7 +108,7 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
-##### Listar determinado projeto
+#### Listar determinado projeto
 ```bash
 {GET} /api/project/:id_project
 ```
@@ -117,3 +117,27 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 `?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário. Ex.: `http:\\meusite.com/api/project/?userTime=true`
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
+## Usuários
+
+Sempre enviar o Header: `Authorization: JWT <token>`
+
+#### Listar todos usuários cadastrados
+```bash
+{GET} /api/user
+```
+
+- Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url. Ex.: `http:\\meusite.com/api/user/?orderBy=email`
+
+- Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.. Ex.: `http:\\meusite.com/api/user/?orderBy=email&sort=asc`
+
+- Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/user/?limit=2`, neste caso irá mostrar somente 2 documentos.
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
+#### Listar determinado usuário
+```bash
+{GET} /api/user/:id_user
+```
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
