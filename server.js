@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-var compression = require('compression');
+const compression = require('compression');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 const bodyParser = require('body-parser');

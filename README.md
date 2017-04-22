@@ -75,29 +75,35 @@ HEADER: {
 
 Sempre enviar o Header: `Authorization: JWT <token>`
 
-- Cadastrar
+##### Cadastrar
 ```bash
 {POST} /api/project
 ```
 
-- Atualizar
+##### Atualizar
 ```bash
 {PUT} /api/project/:id_project
 ```
 
-- Deletar
+##### Deletar
 ```bash
 {DELETE} /api/project/:id_project
 ```
 
 Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
-- Listar todos projetos cadastrados
+##### Listar projetos cadastrados
 ```bash
 {GET} /api/project
 ```
 
-- Listar um determinado projeto
+- Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
+`?userTime=true` na url. Isso fará com que todos os projetos, que o usuário pertence, sejam mostrado ao usuário.
+
+##### Listar determinado projeto
 ```bash
 {GET} /api/project/:id_project
 ```
+
+- Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
+`?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário.
