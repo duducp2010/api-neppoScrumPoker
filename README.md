@@ -98,7 +98,11 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 ```
 
 - Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
-`?userTime=true` na url. Isso fará com que todos os projetos, que o usuário pertence, sejam mostrado ao usuário.
+`userTime=true` na url. Isso fará com que todos os projetos, que o usuário pertence, sejam mostrado ao usuário. Ex.: `http:\\meusite.com/api/project/?userTime=true`
+
+- Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url. Ex.: `http:\\meusite.com/api/project/?orderBy=title`
+
+- Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.. Ex.: `http:\\meusite.com/api/project/?orderBy=title&sort=asc`
 
 ##### Listar determinado projeto
 ```bash
@@ -106,4 +110,4 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 ```
 
 - Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
-`?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário.
+`?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário. Ex.: `http:\\meusite.com/api/project/?userTime=true`

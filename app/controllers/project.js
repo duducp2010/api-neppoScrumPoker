@@ -1,14 +1,31 @@
 const Project = require('../models/project');
 
+function sortAndOrderBy(keySort, keyOrderBy) {
+    var sort = 'asc';
+    if (keySort)
+        sort = keySort;
+
+    var orderBy = 'createdAt';
+    if (keyOrderBy)
+        orderBy = keyOrderBy;
+
+    const sortObj = {};
+    sortObj[orderBy] = sort;
+
+    return sortObj;
+}
+
 exports.getAllProjects = function (req, res, next) {
+    const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
+
     if (req.query.userTime == 'true') {
-        Project.find({$or: [{'time': req.user._id}, {'id_user': req.user._id}]}, function (err, project) {
+        Project.find().sort(sortObj).find({$or: [{'time': req.user._id}, {'id_user': req.user._id}]}, function (err, project) {
             if (err) return res.send(500, {error: err});
 
             res.json(project);
         });
     } else {
-        Project.find(function (err, projects) {
+        Project.find().sort(sortObj).find(function (err, projects) {
             if (err) return res.send(500, {error: err});
 
             res.json(projects);
