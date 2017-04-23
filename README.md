@@ -86,11 +86,17 @@ Sempre enviar o Header: `Authorization: JWT <token>`
 ```
 
 #### Deletar
+Para deletar um projeto:
 ```bash
 {DELETE} /api/v1/project/:id_project
 ```
 
-Obs.: Somente quem cadastrou o projeto pode exclui-lo
+Para deletar uma key de um projeto:
+```bash
+{DELETE} /api/v1/project/:id_project/?key=NOME_DA_KEY
+```
+
+Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 
 #### Listar projetos cadastrados
 ```bash

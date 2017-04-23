@@ -108,26 +108,49 @@ exports.update = function (req, res, next) {
 exports.delete = function (req, res, next) {
     const id_project = req.params.id_project;
 
-    Project.findById(id_project, function (err, foundProject) {
-        if (err) {
-            res.status(422).json({message: 'Projeto não encontrado', error: err});
-            return next(err);
-        }
+    if (req.query.key) {
+        var obj = {};
+        obj[req.query.key] = 1;
 
-        if (foundProject.id_user !== req.user._id) {
-            res.status(401).json({message: 'Você não está autorizado a excluir este projeto.'});
-            return next('Não autorizado');
-        }
+        Project.findByIdAndUpdate(id_project, {$unset: obj}, {new: true}, function (err, foundProject) {
+            if (err.code === 16837)
+                return res.status(500).json({message: 'A key ' + req.query.key + ' não pode ser excluida'});
 
-        Project.remove({
-            _id: id_project
-        }, function (err, deleted) {
-            if (err) return res.send(500, {error: err});
+            if (err)
+                return res.send(500, {error: err});
+
+            if (foundProject.id_user !== req.user._id) {
+                res.status(401).json({message: 'Você não está autorizado a modificar este projeto'});
+                return next('Não autorizado');
+            }
 
             return res.json({
-                message: 'Projeto excluído com sucesso!',
-                project: deleted
+                message: 'A key ' + req.query.key + ' foi excluida',
+                project: foundProject
             });
         });
-    });
+    } else {
+        Project.findById(id_project, function (err, foundProject) {
+            if (err) {
+                res.status(422).json({message: 'Projeto não encontrado', error: err});
+                return next(err);
+            }
+
+            if (foundProject.id_user !== req.user._id) {
+                res.status(401).json({message: 'Você não está autorizado a excluir este projeto'});
+                return next('Não autorizado');
+            }
+
+            Project.remove({
+                _id: id_project
+            }, function (err, deleted) {
+                if (err) return res.send(500, {error: err});
+
+                return res.json({
+                    message: 'Projeto excluído com sucesso!',
+                    project: deleted
+                });
+            });
+        });
+    }
 };
