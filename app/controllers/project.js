@@ -23,8 +23,8 @@ exports.getAllProjects = function (req, res, next) {
 
     obj[req.query.key] = req.query.text; //select key=text
 
-    if (req.query.userTime === 'true') {
-        obj['$or'] = [{'time': req.user._id}, {'id_user': req.user._id}];
+    if (req.query.userTeam === 'true') {
+        obj['$or'] = [{'team': req.user._id}, {'id_user': req.user._id}];
     }
 
     query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select);
@@ -45,8 +45,8 @@ exports.getProject = function (req, res, next) {
     var obj = {};
     obj['_id'] = req.params.id_project;
 
-    if (req.query.userTime === 'true')
-        obj['$or'] = [{'time': req.user._id}, {'id_user': req.user._id}];
+    if (req.query.userTeam === 'true')
+        obj['$or'] = [{'team': req.user._id}, {'id_user': req.user._id}];
 
     query = Project.find(obj).select(select);
     query.exec(function (err, project) {
@@ -68,7 +68,7 @@ exports.create = function (req, res, next) {
         date_end: req.body.date_end,
         status: req.body.status,
         cards: req.body.cards,
-        time: req.body.time,
+        team: req.body.team,
         id_user: req.body.id_user
     }, function (err, project) {
         if (err) return res.send(500, {error: err});

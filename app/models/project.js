@@ -24,7 +24,7 @@ var ProjectSchema = new mongoose.Schema({
         required: [true, 'Informe as cartas que serão usadas durante a votação'],
         min: [2, 'Informe no mínimo 2 cartas']
     },
-    time: {
+    team: {
         type: [String],
         required: [true, 'Informe os usuário que poderão votar no projeto.']
     },

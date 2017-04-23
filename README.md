@@ -104,7 +104,7 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 ```
 
 - Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
-`userTime=true` na url. Isso fará com que todos os projetos, que o usuário pertence, sejam mostrado ao usuário. Ex.: `http:\\meusite.com/api/v1/project/?userTime=true`
+`userTeam=true` na url. Isso fará com que todos os projetos, que o usuário pertence, sejam mostrado ao usuário. Ex.: `http:\\meusite.com/api/v1/project/?userTeam=true`
 
 - Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url. Ex.: `http:\\meusite.com/api/v1/project/?orderBy=title`
 
@@ -122,7 +122,7 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 ```
 
 - Para verificar se o usuário pertence a equipe do projeto, acrescente o parametro 
-`?userTime=true` na url. Isso fará com que o projeto seja mostrado ao usuário. Ex.: `http:\\meusite.com/api/v1/project/?userTime=true`
+`?userTeam=true` na url. Isso fará com que o projeto seja mostrado ao usuário. Ex.: `http:\\meusite.com/api/v1/project/?userTeam=true`
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
