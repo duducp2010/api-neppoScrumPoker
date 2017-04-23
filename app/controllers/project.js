@@ -19,54 +19,43 @@ exports.getAllProjects = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
     const limit = req.query.limit;
     const select = req.query.select;
-    var query = {};
 
     if (req.query.userTime === 'true') {
-        query = Project.find({$or: [{time: req.user._id}, {id_user: req.user._id}]})
-            .sort(sortObj)
-            .limit(Number(limit))
-            .select(select);
-
-        query.exec(function (err, project) {
-            if (err) return res.send(500, {error: err});
-            res.json(project);
-        });
-    } else {
-        query = Project.find()
-            .sort(sortObj)
-            .limit(Number(limit))
-            .select(select);
-
-        query.exec(function (err, projects) {
-            if (err) return res.send(500, {error: err});
-            res.json(projects);
-        });
+        var obj = {};
+        obj['$or'] = [{'time': req.user._id}, {'id_user': req.user._id}];
     }
+
+    query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select);
+    query.exec(function (err, project) {
+        if (err)
+            return res.send(500, {message: 'Nenhum projeto foi encontrado', error: err});
+
+        if (!project.length)
+            return res.status(422).json({message: 'Não há nenhum projeto cadastrado'});
+
+        return res.json(project);
+    });
 };
 
 exports.getProject = function (req, res, next) {
-    var query = {};
     const select = req.query.select;
 
-    if (req.query.userTime === 'true') {
-        query = Project.find({
-            $or: [{'time': req.user._id}, {'id_user': req.user._id}],
-            _id: req.params.id_project
-        })
-            .select(select);
+    var obj = {};
+    obj['_id'] = req.params.id_project;
 
-        query.exec(function (err, project) {
-            if (err) return res.send(500, {error: err});
-            res.json(project);
-        });
-    } else {
-        query = Project.findById(req.params.id_project).select(select);
+    if (req.query.userTime === 'true')
+        obj['$or'] = [{'time': req.user._id}, {'id_user': req.user._id}];
 
-        query.exec(function (err, project) {
-            if (err) return res.send(500, {error: err});
-            res.json(project);
-        });
-    }
+    query = Project.find(obj).select(select);
+    query.exec(function (err, project) {
+        if (err)
+            return res.send(500, {message: 'Nenhum projeto foi encontrado', error: err});
+
+        if (!project.length)
+            return res.status(422).json({message: 'Você não tem permissão para visualizar o projeto'});
+
+        return res.json(project);
+    });
 };
 
 exports.create = function (req, res, next) {
@@ -105,7 +94,6 @@ exports.update = function (req, res, next) {
 };
 
 exports.delete = function (req, res, next) {
-    var user_id = req.user._id;
     var id_project = req.params.id_project;
 
     Project.findById(id_project, function (err, foundProject) {
@@ -114,7 +102,7 @@ exports.delete = function (req, res, next) {
             return next(err);
         }
 
-        if (foundProject.id_user !== user_id) {
+        if (foundProject.id_user !== req.user._id) {
             res.status(401).json({error: 'Você não está autorizado a excluir este projeto.'});
             return next('Não autorizado');
         }
