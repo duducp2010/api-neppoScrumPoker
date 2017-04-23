@@ -19,9 +19,11 @@ exports.getAllProjects = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
     const limit = req.query.limit;
     const select = req.query.select;
+    var obj = {};
+
+    obj[req.query.key] = req.query.text; //select key=text
 
     if (req.query.userTime === 'true') {
-        var obj = {};
         obj['$or'] = [{'time': req.user._id}, {'id_user': req.user._id}];
     }
 
@@ -31,7 +33,7 @@ exports.getAllProjects = function (req, res, next) {
             return res.send(500, {message: 'Nenhum projeto foi encontrado', error: err});
 
         if (!project.length)
-            return res.status(422).json({message: 'Não há nenhum projeto cadastrado'});
+            return res.status(422).json({message: 'Nenhum projeto foi encontrado'});
 
         return res.json(project);
     });
@@ -79,31 +81,41 @@ exports.create = function (req, res, next) {
 };
 
 exports.update = function (req, res, next) {
-    Project.findByIdAndUpdate(req.params.id_project, {$set: req.body}, {new: true}, function (err, updateProject) {
-        if (err) return res.send(500, {error: err});
+    var updateObj = {
+        $set: req.body
+    };
+
+    var optionsObj = {
+        new: true,
+        upsert: true
+    };
+
+    Project.findByIdAndUpdate(req.params.id_project, updateObj, optionsObj, function (err, updateProject) {
+        if (err)
+            return res.send(500, {error: err});
 
         if (updateProject) {
             res.json({
-                message: 'Atualizado com sucesso!',
+                message: 'Projeto atualizado com sucesso!',
                 project: updateProject
             });
         }
 
-        res.status(422).json({error: 'Nenhum projeto encontrado'});
+        res.status(422).json({message: 'Nenhum projeto encontrado'});
     });
 };
 
 exports.delete = function (req, res, next) {
-    var id_project = req.params.id_project;
+    const id_project = req.params.id_project;
 
     Project.findById(id_project, function (err, foundProject) {
         if (err) {
-            res.status(422).json({error: 'Projeto não encontrado'});
+            res.status(422).json({message: 'Projeto não encontrado', error: err});
             return next(err);
         }
 
         if (foundProject.id_user !== req.user._id) {
-            res.status(401).json({error: 'Você não está autorizado a excluir este projeto.'});
+            res.status(401).json({message: 'Você não está autorizado a excluir este projeto.'});
             return next('Não autorizado');
         }
 

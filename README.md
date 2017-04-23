@@ -108,6 +108,8 @@ Obs.: Somente quem cadastrou o projeto pode exclui-lo
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
+- Para buscar usuários por um key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/project/?key=title&text=Teste`.
+
 #### Listar determinado projeto
 ```bash
 {GET} /api/v1/project/:id_project
@@ -134,6 +136,8 @@ Sempre enviar o Header: `Authorization: JWT <token>`
 - Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/user/?limit=2`, neste caso irá mostrar somente 2 documentos.
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
+- Para buscar usuários por um key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/user/?key=department&text=Desenvolvedor`.
 
 #### Listar determinado usuário
 ```bash

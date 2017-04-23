@@ -39,7 +39,9 @@ exports.getUser = function (req, res, next) {
 
     var query = User.findById(req.params.id_user).select(select);
     query.exec(function (err, users) {
-        if (err) return res.send(500, {error: err});
-        res.json(users);
+        if (err)
+            return res.send(500, {message: 'Nenhum usuário foi encontrado', error: err});
+
+        return res.json(users);
     });
 };
