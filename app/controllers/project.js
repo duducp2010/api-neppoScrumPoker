@@ -83,16 +83,12 @@ exports.create = function (req, res, next) {
 };
 
 exports.update = function (req, res, next) {
-    var updateObj = {
-        $set: req.body
-    };
-
     var optionsObj = {
         new: true,
         upsert: true
     };
 
-    Project.findByIdAndUpdate(req.params.id_project, updateObj, optionsObj, function (err, updateProject) {
+    Project.findByIdAndUpdate(req.params.id_project, {$set: req.body}, optionsObj, function (err, updateProject) {
         if (err)
             return res.status(500).send({message: 'Erro ao atualizar projeto', error: err});
 
@@ -100,8 +96,6 @@ exports.update = function (req, res, next) {
             message: 'Projeto atualizado com sucesso',
             project: updateProject
         });
-
-        //res.status(422).json({message: 'Nenhum projeto encontrado'});
     });
 };
 
