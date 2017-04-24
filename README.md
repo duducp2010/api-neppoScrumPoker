@@ -86,6 +86,8 @@ Sempre enviar o Header: `Authorization: JWT <token>`
 
 - Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/user/?limit=2`, neste caso irá mostrar somente 2 documentos.
 
+- Para pular uma determinada quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `skip=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/user/?skip=2`, neste caso irá mostrar todos os documentos encontrados na consulta pulando os 2 primeiros.
+
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
 - Para buscar usuários, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/user/?key=department&text=Desenvolvedor`.
@@ -138,6 +140,8 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 
 - Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/project/?limit=2`, neste caso irá mostrar somente 2 documentos.
 
+- Para pular uma determinada quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `skip=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/project/?skip=2`, neste caso irá mostrar todos os documentos encontrados na consulta pulando os 2 primeiros.
+
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
 - Para buscar projetos, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/project/?key=title&text=Teste`.
@@ -188,6 +192,8 @@ Para deletar uma key de um projeto:
 - Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.
 
 - Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`.
+
+- Para pular uma determinada quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `skip=QUANTIDADE`.
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 

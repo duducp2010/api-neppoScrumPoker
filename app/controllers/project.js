@@ -18,6 +18,7 @@ function sortAndOrderBy(keySort, keyOrderBy) {
 exports.getAllProjects = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
     const limit = req.query.limit;
+    const skip = req.query.skip;
     const select = req.query.select;
     var obj = {};
 
@@ -27,13 +28,13 @@ exports.getAllProjects = function (req, res, next) {
         obj['$or'] = [{'team': req.user._id}, {'id_user': req.user._id}];
     }
 
-    query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select);
+    query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select).skip(Number(skip));
     query.exec(function (err, project) {
         if (err)
-            return res.send(500, {message: 'Nenhum projeto foi encontrado', error: err});
+            return res.status(500).send({message: 'Nenhum projeto foi encontrado', error: err});
 
         if (!project.length)
-            return res.status(422).json({message: 'Nenhum projeto foi encontrado'});
+            return res.status(422).send({message: 'Nenhum projeto foi encontrado'});
 
         return res.json(project);
     });
@@ -51,12 +52,12 @@ exports.getProject = function (req, res, next) {
     query = Project.find(obj).select(select);
     query.exec(function (err, project) {
         if (err)
-            return res.send(500, {message: 'Nenhum projeto foi encontrado', error: err});
+            return res.status(500).send({message: 'Nenhum projeto foi encontrado', error: err});
 
         if (!project || !project.length)
-            return res.status(422).json({message: 'Você não tem permissão para visualizar o projeto'});
+            return res.status(422).send({message: 'Você não tem permissão para visualizar o projeto'});
 
-        return res.json(project);
+        return res.status(200).json(project);
     });
 };
 
@@ -72,9 +73,9 @@ exports.create = function (req, res, next) {
         id_user: req.body.id_user
     }, function (err, project) {
         if (err)
-            return res.send(500, {message: 'Erro ao criar projeto', error: err});
+            return res.status(500).send({message: 'Erro ao criar projeto', error: err});
 
-        res.json({
+        res.status(200).send({
             message: 'Projeto criado com sucesso',
             project: project
         });
@@ -93,16 +94,14 @@ exports.update = function (req, res, next) {
 
     Project.findByIdAndUpdate(req.params.id_project, updateObj, optionsObj, function (err, updateProject) {
         if (err)
-            return res.send(500, {message: 'Erro ao atualizar projeto', error: err});
+            return res.status(500).send({message: 'Erro ao atualizar projeto', error: err});
 
-        if (updateProject) {
-            res.json({
-                message: 'Projeto atualizado com sucesso',
-                project: updateProject
-            });
-        }
+        res.status(200).send({
+            message: 'Projeto atualizado com sucesso',
+            project: updateProject
+        });
 
-        res.status(422).json({message: 'Nenhum projeto encontrado'});
+        //res.status(422).json({message: 'Nenhum projeto encontrado'});
     });
 };
 
@@ -115,17 +114,17 @@ exports.delete = function (req, res, next) {
 
         Project.findByIdAndUpdate(id_project, {$unset: obj}, {new: true}, function (err, foundProject) {
             if (err.code === 16837)
-                return res.status(500).json({message: 'A key ' + req.query.key + ' não pode ser excluída'});
+                return res.status(500).send({message: 'A key ' + req.query.key + ' não pode ser excluída'});
 
             if (err)
-                return res.send(500, {message: 'Erro ao excluir key', error: err});
+                return res.status(500).send({message: 'Erro ao excluir key', error: err});
 
             if (foundProject.id_user !== req.user._id) {
-                res.status(401).json({message: 'Você não está autorizado a modificar este projeto'});
+                res.status(401).send({message: 'Você não está autorizado a modificar este projeto'});
                 return next('Não autorizado');
             }
 
-            return res.json({
+            return res.send(200).send({
                 message: 'A key ' + req.query.key + ' foi excluída',
                 project: foundProject
             });
@@ -133,10 +132,10 @@ exports.delete = function (req, res, next) {
     } else {
         Project.findById(id_project, function (err, foundProject) {
             if (err)
-                res.status(422).json({message: 'Projeto não encontrado', error: err});
+                res.status(422).send({message: 'Projeto não encontrado', error: err});
 
             if (foundProject.id_user !== req.user._id) {
-                res.status(401).json({message: 'Você não está autorizado a excluir este projeto'});
+                res.status(401).send({message: 'Você não está autorizado a excluir este projeto'});
                 return next('Não autorizado');
             }
 
@@ -144,9 +143,9 @@ exports.delete = function (req, res, next) {
                 _id: id_project
             }, function (err, deleted) {
                 if (err)
-                    return res.send(500, {message: 'Erro ao excluir projeto', error: err});
+                    return res.status(500).send({message: 'Erro ao excluir projeto', error: err});
 
-                return res.json({
+                return res.status(200).send({
                     message: 'Projeto excluído com sucesso',
                     project: deleted
                 });

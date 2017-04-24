@@ -18,6 +18,7 @@ function sortAndOrderBy(keySort, keyOrderBy) {
 exports.getAllStoryProject = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
     const limit = req.query.limit;
+    const skip = req.query.skip;
     const select = req.query.select;
 
     const search = {};
@@ -27,6 +28,7 @@ exports.getAllStoryProject = function (req, res, next) {
     var query = Story.find(search)
         .sort(sortObj)
         .limit(Number(limit))
+        .skip(Number(skip))
         .select(select);
 
     query.exec(function (err, users) {
