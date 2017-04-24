@@ -32,8 +32,10 @@ exports.getAllStoryProject = function (req, res, next) {
         .select(select);
 
     query.exec(function (err, users) {
-        if (err) return res.send(500, {error: err});
-        res.json(users);
+        if (err)
+            return res.status(500).send({error: err});
+
+        res.status(200).json(users);
     });
 };
 
@@ -43,12 +45,12 @@ exports.getStory = function (req, res, next) {
     var query = Story.find({$and: [{id_project: req.params.id_project}, {_id: req.params.id_story}]}).select(select);
     query.exec(function (err, users) {
         if (err)
-            return res.send(500, {message: 'Erro ao buscar estória', error: err});
+            return res.status(500).send({message: 'Erro ao buscar estória', error: err});
 
         if (!users || !users.length)
-            return res.send(422, {message: 'Nenhuma estória foi encontrada'});
+            return res.status(422).send({message: 'Nenhuma estória foi encontrada'});
 
-        return res.json(users);
+        return res.status(200).json(users);
     });
 };
 
@@ -63,9 +65,10 @@ exports.create = function (req, res, next) {
             note: req.body.voting.note
         }
     }, function (err, story) {
-        if (err) return res.send(500, {error: err});
+        if (err)
+            return res.status(500).send({error: err});
 
-        res.json({
+        return res.status(200).json({
             message: 'Estória cadastrada com sucesso',
             story: story
         });
@@ -84,16 +87,16 @@ exports.update = function (req, res, next) {
     var query = Story.find({$and: [{id_project: id_project}, {_id: id_story}]});
     query.exec(function (err, foundStory) {
         if (err)
-            return res.send(500, {message: 'Erro ao buscar estória', error: err});
+            return res.status(500).send({message: 'Erro ao buscar estória', error: err});
 
         if (!foundStory || !foundStory.length)
-            return res.send(422, {message: 'Nenhuma estória foi encontrada'});
+            return res.status(422).send({message: 'Nenhuma estória foi encontrada'});
 
         Story.findByIdAndUpdate(id_story, {$set: req.body}, optionsObj, function (err, updateStory) {
             if (err)
-                return res.send(500, {message: 'Erro ao atualizar estória', error: err});
+                return res.status(500).send({message: 'Erro ao atualizar estória', error: err});
 
-            res.json({
+            return res.status(200).json({
                 message: 'Estória atualizada com sucesso',
                 story: updateStory
             });
@@ -108,10 +111,10 @@ exports.delete = function (req, res, next) {
     var query = Story.find({$and: [{id_project: id_project}, {_id: id_story}]});
     query.exec(function (err, foundStory) {
         if (err)
-            return res.send(500, {message: 'Erro ao buscar estória', error: err});
+            return res.status(500).send({message: 'Erro ao buscar estória', error: err});
 
         if (!foundStory || !foundStory.length)
-            return res.send(422, {message: 'Nenhuma estória foi encontrada'});
+            return res.status(422).send({message: 'Nenhuma estória foi encontrada'});
 
         if (req.query.key) {
             var obj = {};
@@ -119,9 +122,12 @@ exports.delete = function (req, res, next) {
 
             Story.findByIdAndUpdate(id_story, {$unset: obj}, {new: true}, function (err, foundProject) {
                 if (err)
-                    return res.send(500, {message: 'A key ' + req.query.key + ' não pode ser excluída', error: err});
+                    return res.status(500).send({
+                        message: 'A key ' + req.query.key + ' não pode ser excluída',
+                        error: err
+                    });
 
-                return res.json({
+                return res.status(200).json({
                     message: 'A key ' + req.query.key + ' foi excluída',
                     project: foundProject
                 });
@@ -129,9 +135,9 @@ exports.delete = function (req, res, next) {
         } else {
             Story.remove({$and: [{id_project: id_project}, {_id: id_story}]}, function (err, deleted) {
                 if (err)
-                    return res.send(500, {message: 'Erro ao excluir estória', error: err});
+                    return res.status(500).send({message: 'Erro ao excluir estória', error: err});
 
-                return res.json({message: 'Estória excluída com sucesso'});
+                return res.status(200).json({message: 'Estória excluída com sucesso'});
             });
         }
     });
