@@ -71,6 +71,32 @@ HEADER: {
 }
 ```
 
+## Usuários
+
+Sempre enviar o Header: `Authorization: JWT <token>`
+
+#### Listar todos usuários cadastrados
+```bash
+{GET} /api/v1/user
+```
+
+- Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url. Ex.: `http:\\meusite.com/api/v1/user/?orderBy=email`
+
+- Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.. Ex.: `http:\\meusite.com/api/v1/user/?orderBy=email&sort=asc`
+
+- Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/user/?limit=2`, neste caso irá mostrar somente 2 documentos.
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
+- Para buscar usuários, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/user/?key=department&text=Desenvolvedor`.
+
+#### Listar determinado usuário
+```bash
+{GET} /api/v1/user/:id_user
+```
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
 ## Projetos
 
 Sempre enviar o Header: `Authorization: JWT <token>`
@@ -114,7 +140,7 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
-- Para buscar usuários por um key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/project/?key=title&text=Teste`.
+- Para buscar projetos, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/project/?key=title&text=Teste`.
 
 #### Listar determinado projeto
 ```bash
@@ -126,28 +152,50 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 
 - Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/project/?select=_id title`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
 
-## Usuários
+
+## Estórias
 
 Sempre enviar o Header: `Authorization: JWT <token>`
 
-#### Listar todos usuários cadastrados
+#### Cadastrar
 ```bash
-{GET} /api/v1/user
+{POST} /api/v1/story/:id_project
 ```
 
-- Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url. Ex.: `http:\\meusite.com/api/v1/user/?orderBy=email`
-
-- Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.. Ex.: `http:\\meusite.com/api/v1/user/?orderBy=email&sort=asc`
-
-- Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`. Ex.: `http:\\meusite.com/api/v1/user/?limit=2`, neste caso irá mostrar somente 2 documentos.
-
-- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
-
-- Para buscar usuários por um key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/user/?key=department&text=Desenvolvedor`.
-
-#### Listar determinado usuário
+#### Atualizar
 ```bash
-{GET} /api/v1/user/:id_user
+{PUT} /api/v1/story/:id_project/:id_story
 ```
 
-- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Ex.: `http:\\meusite.com/api/v1/user/?select=_id email`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+#### Deletar
+Para deletar um projeto:
+```bash
+{DELETE} /api/v1/story/::id_project/:id_story
+```
+
+Para deletar uma key de um projeto:
+```bash
+{DELETE} /api/v1/story/:id_project/:id_story/?key=NOME_DA_KEY
+```
+
+#### Listar estórias de um determinado projeto
+```bash
+{GET} /api/v1/story/:id_project
+```
+
+- Para ordernar a busca por determinada key, acrescente o parametro `orderBy=NOME_DA_KEY` na url.
+
+- Para ordernar a busca em Ascendente ou Descendente, acrescente o parametro `sort=asc` para ordenar em Ascendente ou `sort=desc` para ordenar em Descendente.
+
+- Para limitar a quantidade de documentos a ser mostrado após a consulta, acrescente o parametro `limit=QUANTIDADE`.
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.
+
+- Para buscar estórias, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`.
+
+#### Listar determinada estória de um projeto
+```bash
+{GET} /api/v1/story/:id_project/:id_story
+```
+
+- Para trazer apenas algumas keys do documento, acrescente o parametro `select=KEY1 KEY2`. Pode ser informada várias key desde que cada uma tenha um espaço entre elas.

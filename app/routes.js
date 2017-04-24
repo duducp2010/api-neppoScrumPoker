@@ -3,7 +3,8 @@ const express = require('express'),
     passport = require('passport'),
     AuthenticationController = require('./controllers/authentication'),
     UserController = require('./controllers/user'),
-    ProjectController = require('./controllers/project');
+    ProjectController = require('./controllers/project'),
+    StoryController = require('./controllers/story');
 
 const requireAuth = passport.authenticate('jwt', {session: false}),
     requireLogin = passport.authenticate('local', {session: false});
@@ -14,7 +15,8 @@ module.exports = function (app) {
         apiRoutes = express.Router(),
         authRoutes = express.Router(),
         userRoutes = express.Router(),
-        projectRoutes = express.Router();
+        projectRoutes = express.Router(),
+        storyRoutes = express.Router();
 
     // Set up routes
     app.use('/api', versionApi);
@@ -43,6 +45,15 @@ module.exports = function (app) {
             projectRoutes.post('/', requireAuth, ProjectController.create),
             projectRoutes.put('/:id_project', requireAuth, ProjectController.update),
             projectRoutes.delete('/:id_project', requireAuth, ProjectController.delete)
+        ),
+
+        // Story Routes
+        apiRoutes.use('/story',
+            storyRoutes.get('/:id_project/:id_story', requireAuth, StoryController.getStory),
+            storyRoutes.get('/:id_project', requireAuth, StoryController.getAllStoryProject),
+            storyRoutes.post('/:id_project', requireAuth, StoryController.create),
+            storyRoutes.put('/:id_project/:id_story', requireAuth, StoryController.update),
+            storyRoutes.delete('/:id_project/:id_story', requireAuth, StoryController.delete)
         )
     );
 };
