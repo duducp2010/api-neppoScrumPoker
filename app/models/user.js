@@ -2,10 +2,14 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var UserSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Informe seu nome e sobrenome']
+    },
     email: {
         type: String,
         lowercase: true,
-        unique: true,
+        index: {unique: true},
         required: [true, 'Um e-mail deve ser informado'],
         validate: function (email) {
             return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
@@ -13,9 +17,7 @@ var UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Uma senha deve ser informada'],
-        min: 64,
-        max: 64
+        required: [true, 'Uma senha deve ser informada']
     },
     department: {
         type: String,
@@ -34,19 +36,18 @@ UserSchema.pre('save', function (next) {
     var user = this;
     var SALT_FACTOR = 5;
 
-    if (!user.isModified('password')) {
-        return next();
-    }
+    // Verifica se o hash da senha foi modificado (ou é novo)
+    if (!user.isModified('password')) return next();
 
+    // Gera o Salt
     bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
-        if (err) {
-            return next(err);
-        }
+        if (err) return next(err);
 
+        // Gera o Hash da senha junto com o Salt
         bcrypt.hash(user.password, salt, null, function (err, hash) {
-            if (err) {
-                return next(err);
-            }
+            if (err) return next(err);
+
+            // substitui a senha da variavel pelo hash
             user.password = hash;
             next();
         });

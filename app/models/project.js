@@ -19,6 +19,9 @@ var ProjectSchema = new mongoose.Schema({
     status: {
         type: String
     },
+    current_story: {
+        type: String
+    },
     cards: {
         type: [String],
         required: [true, 'Informe as cartas que serão usadas durante a votação'],

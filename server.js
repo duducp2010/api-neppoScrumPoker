@@ -1,11 +1,3 @@
-/**
- * Arquivo: server.js
- * Descrição: Arquivo responsável por levantar o serviço do Node.Js para poder
- * executar a aplicação e a API através do Express.Js.
- * Author:
- * Data de Criação: 20/04/2017
- */
-
 const express = require('express');
 const app = express();
 const compression = require('compression');

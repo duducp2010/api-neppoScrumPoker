@@ -1,16 +1,20 @@
 var jwt = require('jsonwebtoken');
+var moment = require('moment');
 var User = require('../models/user');
 var authConfig = require('../../config/auth');
 
+const expires = moment().add(7, 'days').valueOf();
+
 function generateToken(user) {
     return jwt.sign(user, authConfig.secret, {
-        expiresIn: 10080
+        expiresIn: expires
     });
 }
 
 function setUserInfo(request) {
     return {
         _id: request._id,
+        name: request.name,
         email: request.email,
         department: request.department,
         role: request.role
@@ -22,15 +26,21 @@ exports.login = function (req, res, next) {
 
     res.status(200).json({
         token: 'JWT ' + generateToken(userInfo),
+        expiresIn: expires,
         user: userInfo
     });
 };
 
 exports.register = function (req, res, next) {
+    var name = req.body.name;
     var email = req.body.email;
     var password = req.body.password;
     var department = req.body.department;
     var role = req.body.role;
+
+    if (!name) {
+        return res.status(422).send({error: 'Você deve informar seu nome e sobrenome'});
+    }
 
     if (!email) {
         return res.status(422).send({error: 'Você deve digitar um e-mail'});
@@ -54,6 +64,7 @@ exports.register = function (req, res, next) {
         }
 
         var user = new User({
+            name: name,
             email: email,
             password: password,
             department: department,
