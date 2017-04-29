@@ -16,9 +16,6 @@ var ProjectSchema = new mongoose.Schema({
     date_end: {
         type: Date
     },
-    status: {
-        type: String
-    },
     current_story: {
         type: String
     },

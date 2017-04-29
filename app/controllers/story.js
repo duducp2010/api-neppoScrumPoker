@@ -31,11 +31,11 @@ exports.getAllStoryProject = function (req, res, next) {
         .skip(Number(skip))
         .select(select);
 
-    query.exec(function (err, users) {
+    query.exec(function (err, storys) {
         if (err)
             return res.status(500).send({error: err});
 
-        res.status(200).json(users);
+        res.status(200).json(storys);
     });
 };
 
@@ -43,14 +43,14 @@ exports.getStory = function (req, res, next) {
     const select = req.query.select;
 
     var query = Story.find({$and: [{id_project: req.params.id_project}, {_id: req.params.id_story}]}).select(select);
-    query.exec(function (err, users) {
+    query.exec(function (err, storys) {
         if (err)
             return res.status(500).send({message: 'Erro ao buscar estória', error: err});
 
-        if (!users || !users.length)
+        if (!storys || !storys.length)
             return res.status(422).send({message: 'Nenhuma estória foi encontrada'});
 
-        return res.status(200).json(users);
+        return res.status(200).json(storys);
     });
 };
 

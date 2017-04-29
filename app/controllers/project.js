@@ -1,6 +1,7 @@
 const Project = require('../models/project');
+const Story = require('../models/story');
 
-function sortAndOrderBy(keySort, keyOrderBy) {
+function sortAndOrderBy(keySort, keyOrderBy, keySort2, keyOrderBy2) {
     var sort = 'asc';
     if (keySort)
         sort = keySort;
@@ -12,11 +13,14 @@ function sortAndOrderBy(keySort, keyOrderBy) {
     const sortObj = {};
     sortObj[orderBy] = sort;
 
+    if (keyOrderBy2 && keySort2)
+        sortObj[keyOrderBy2] = keySort2;
+
     return sortObj;
 }
 
 exports.getAllProjects = function (req, res, next) {
-    const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy);
+    const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy, req.query.sort2, req.query.orderBy2);
     const limit = req.query.limit;
     const skip = req.query.skip;
     const select = req.query.select;
@@ -36,7 +40,7 @@ exports.getAllProjects = function (req, res, next) {
         if (!project.length)
             return res.status(422).send({message: 'Nenhum projeto foi encontrado'});
 
-        return res.json(project);
+        res.status(200).json(project);
     });
 };
 
@@ -57,7 +61,12 @@ exports.getProject = function (req, res, next) {
         if (!project || !project.length)
             return res.status(422).send({message: 'Você não tem permissão para visualizar o projeto'});
 
-        return res.status(200).json(project);
+        Story.count({id_project: req.params.id_project}, function (err, countStorys) {
+            return res.status(200).send({
+                project: project,
+                total_story: countStorys
+            });
+        });
     });
 };
 
