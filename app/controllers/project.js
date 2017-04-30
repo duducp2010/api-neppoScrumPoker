@@ -22,26 +22,38 @@ function sortAndOrderBy(keySort, keyOrderBy, keySort2, keyOrderBy2) {
 exports.getAllProjects = function (req, res, next) {
     const sortObj = sortAndOrderBy(req.query.sort, req.query.orderBy, req.query.sort2, req.query.orderBy2);
     const limit = req.query.limit;
-    const skip = req.query.skip;
     const select = req.query.select;
-    var obj = {};
 
+    var skip = 0; //precisa para evitar o erro na busca com o parametro count, caso nao seja informado o valor do skip
+    if (req.query.skip)
+        skip = req.query.skip;
+
+    var obj = {};
     obj[req.query.key] = req.query.text; //select key=text
 
     if (req.query.userTeam === 'true') {
         obj['$or'] = [{'team': req.user._id}, {'id_user': req.user._id}];
     }
 
-    query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select).skip(Number(skip));
-    query.exec(function (err, project) {
-        if (err)
-            return res.status(500).send({message: 'Nenhum projeto foi encontrado', error: err});
+    if (req.query.count !== 'true') { // mostra os projetos resultantes da busca
+        query = Project.find(obj).sort(sortObj).limit(Number(limit)).select(select).skip(Number(skip));
+        query.exec(function (err, project) {
+            if (err)
+                return res.status(500).send({message: 'Nenhum projeto foi encontrado', error: err});
 
-        if (!project.length)
-            return res.status(422).send({message: 'Nenhum projeto foi encontrado'});
+            if (!project.length)
+                return res.status(422).send({message: 'Nenhum projeto foi encontrado'});
 
-        res.status(200).json(project);
-    });
+            res.status(200).json(project);
+        });
+    } else { //mostra somente o total de resultados encontrados
+        query = Project.find(obj).limit(Number(limit)).select(select).skip(Number(skip)).count(function (err, count) {
+            if (err)
+                return res.status(500).send({message: 'Nenhum projeto foi encontrado', error: err});
+
+            res.status(200).json(count);
+        });
+    }
 };
 
 exports.getProject = function (req, res, next) {
