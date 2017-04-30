@@ -13,6 +13,10 @@ var StorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    id_user: {
+        type: String,
+        required: true
+    },
     time_total: String,
     voting: {id_user: String, note: Number}
 }, {

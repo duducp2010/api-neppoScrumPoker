@@ -60,6 +60,7 @@ exports.create = function (req, res, next) {
         description: req.body.description,
         time_total: req.body.time_total,
         id_project: req.params.id_project,
+        id_user: req.user._id,
         voting: {
             id_user: req.body.voting.id_user,
             note: req.body.voting.note

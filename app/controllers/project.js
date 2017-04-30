@@ -76,10 +76,10 @@ exports.create = function (req, res, next) {
         description: req.body.description,
         date_init: req.body.date_init,
         date_end: req.body.date_end,
-        status: req.body.status,
+        current_story: req.body.current_story,
         cards: req.body.cards,
         team: req.body.team,
-        id_user: req.body.id_user
+        id_user: req.user._id
     }, function (err, project) {
         if (err)
             return res.status(500).send({message: 'Erro ao criar projeto', error: err});
