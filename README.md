@@ -146,8 +146,6 @@ Obs.: Somente quem cadastrou o projeto pode deleta-lo ou deletar uma key
 
 - Para buscar projetos, por determinada key do documento, acrescente o parametro `key=NOME_KEY&text=TEXTO_KEY`. Ex.: `http:\\meusite.com/api/v1/project/?key=title&text=Teste`.
 
-- Para mostrar o total de projetos resultante da pesquisa, acrescente o parametro `count=true`. Ex.: `http:\\meusite.com/api/v1/project/?count=true`.
-
 #### Listar determinado projeto
 ```bash
 {GET} /api/v1/project/:id_project
